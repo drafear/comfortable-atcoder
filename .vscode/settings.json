@@ -1,0 +1,30 @@
+{
+  "cSpell.userWords": ["adplan"],
+  "editor.formatOnSave": true,
+  "editor.renderLineHighlight": "all",
+  "editor.renderWhitespace": "boundary",
+  "editor.rulers": [120],
+  "editor.scrollBeyondLastLine": false,
+  "editor.tabSize": 2,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "git.autofetch": true,
+  "gitlens.advanced.messages": {
+    "suppressShowKeyBindingsNotice": true
+  },
+  "gitlens.gitExplorer.files.layout": "list",
+  "html.suggest.ionic": false,
+  "javascript.format.enable": false,
+  "javascript.referencesCodeLens.enabled": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "markdown.extension.showExplorer": true,
+  "markdown.extension.tableFormatter.enabled": true,
+  "markdown.extension.toc.githubCompatibility": true,
+  "npm.enableScriptExplorer": true,
+  "npm.packageManager": "npm",
+  "trailing-spaces.highlightCurrentLine": false,
+  "typescript.implementationsCodeLens.enabled": true,
+  "typescript.referencesCodeLens.enabled": true,
+  "workbench.statusBar.feedback.visible": false,
+  "xo.enable": true
+}

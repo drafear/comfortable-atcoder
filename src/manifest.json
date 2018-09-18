@@ -1,0 +1,26 @@
+{
+	"name": "Comfortable Atcoder",
+	"version": "0.00",
+	"manifest_version": 2,
+	"description": "* Notify judge result of codes you submit\n* Notify clarifications on the contest page you open when you are `owner`\n* Colorful problem page\n* Add a link tab to beta page on non-beta pages\n* Dropdown list of problems\n* Warn if you submit with specific languages such as `text`, `bash` and so on (configurable)\n* Download submitted codes\n* Disable/Enable them\n",
+	"content_scripts": [
+		{
+			"matches": ["*://beta.atcoder.jp/contests/*"],
+			"js": ["lib/jquery.min.js", "lib/jquery.cookie.js", "lib/jquery.url.js", "all.js"],
+			"css": ["all.css"],
+			"run_at": "document_start"
+		}
+	],
+	"web_accessible_resources": ["image/beta.png"],
+	"background": {
+		"scripts": [
+			"background.js"
+		],
+		"persistent": false
+	},
+	"icons": {
+		"16": "image/icon.png",
+		"48": "image/icon.png",
+		"128": "image/icon.png"
+	}
+}

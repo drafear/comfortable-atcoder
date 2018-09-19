@@ -7,7 +7,7 @@ build:
         sudo apt-get update -y
         sudo apt-get upgrade -y
         sudo apt-get install -y zip
-        npm i xo semantic-release
+        npm i
 
     - script:
       name: xo-lint

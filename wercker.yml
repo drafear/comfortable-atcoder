@@ -1,0 +1,12 @@
+box: node:10
+build:
+  steps:
+    - script:
+        name: npm install
+        code: |
+          npm install
+
+    - script:
+      name: xo-lint
+      code: |
+        xo .

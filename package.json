@@ -10,7 +10,7 @@
     "xo": "0.23.0"
   },
   "engines": {
-    "node": "8.9.4",
+    "node": "10",
     "npm": "6.3"
   },
   "private": true,

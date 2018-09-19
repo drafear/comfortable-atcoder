@@ -1,0 +1,12 @@
+box: node:10
+build:
+  steps:
+    - script:
+        name: npm install xo
+        code: |
+          npm i xo
+
+    - script:
+      name: xo-lint
+      code: |
+        npx xo src/*.js

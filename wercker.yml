@@ -9,4 +9,4 @@ build:
     - script:
       name: xo-lint
       code: |
-        xo .
+        npx xo src/*.js

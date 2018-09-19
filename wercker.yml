@@ -10,3 +10,9 @@ build:
       name: xo-lint
       code: |
         npx xo src/*.js
+
+    - script:
+      name: Release
+      code: |
+        npm run package
+        npx semantic-release

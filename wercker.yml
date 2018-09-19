@@ -4,10 +4,7 @@ build:
     - script:
       name: Install dependencies
       code: |
-        sudo apt-get update -y
-        sudo apt-get upgrade -y
-        sudo apt-get install -y zip
-        npm i
+        npm i xo
 
     - script:
       name: xo-lint
@@ -16,6 +13,13 @@ build:
 
 release:
   steps:
+    - script: Install dependencies
+      code: |
+        sudo apt-get update -y
+        sudo apt-get upgrade -y
+        sudo apt-get install -y zip
+        npm i
+
     - script:
       name: Release
       code: |

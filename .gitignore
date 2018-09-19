@@ -4,4 +4,4 @@
 dist/
 node_modules/
 
-src/*.less
+src/*.css

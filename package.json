@@ -27,16 +27,13 @@
     "dist",
     "src/lib"
   ],
-  "prettier": {
-    "bracketSpacing": true,
-    "printWidth": 120,
-    "singleQuote": true,
-    "trailingComma": "all"
-  },
   "xo": {
-    "prettier": true,
     "space": true,
-    "extends": "eslint:recommended",
+    "strict": true,
+    "rules": {
+      "no-undef": 0,
+      "comma-dangle": ["error", "always-multiline"]
+    },
     "parserOptions": {
       "ecmaVersion": 6
     }

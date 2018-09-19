@@ -14,6 +14,8 @@ build:
       code: |
         npx xo src/*.js
 
+release:
+  steps:
     - script:
       name: Release
       code: |

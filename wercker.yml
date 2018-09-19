@@ -13,7 +13,8 @@ build:
 
 release:
   steps:
-    - script: Install dependencies
+    - script:
+      name: Install dependencies
       code: |
         sudo apt-get update -y
         sudo apt-get upgrade -y

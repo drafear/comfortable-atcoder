@@ -16,6 +16,7 @@ release:
     - script:
       name: Install dependencies
       code: |
+        sudo apt-get update -y
         sudo apt-get install -y zip
         npm i
 

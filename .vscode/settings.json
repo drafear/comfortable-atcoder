@@ -26,5 +26,6 @@
   "typescript.implementationsCodeLens.enabled": true,
   "typescript.referencesCodeLens.enabled": true,
   "workbench.statusBar.feedback.visible": false,
+  "xo.format.enable": true,
   "xo.enable": true
 }

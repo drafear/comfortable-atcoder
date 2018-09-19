@@ -6,7 +6,7 @@
 	"content_scripts": [
 		{
 			"matches": ["*://beta.atcoder.jp/contests/*", "*://*.contest.atcoder.jp/*"],
-			"js": ["lib/jquery.min.js", "lib/jquery.cookie.js", "lib/jquery.url.js", "all.js"],
+			"js": ["lib/jquery.min.js", "lib/jquery.cookie.js", "all.js"],
 			"css": ["all.css"],
 			"run_at": "document_start"
 		},

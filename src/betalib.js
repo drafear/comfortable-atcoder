@@ -4,6 +4,7 @@ class Contest {
   constructor(id) {
     this.id = id;
   }
+
   getUrl() {
     return `/contests/${this.id}`;
   }
@@ -41,7 +42,7 @@ window.Betalib = class {
     }
     const res = [];
     const reg = new RegExp(`${contest.getUrl().replace(/\//g, '\\/')}\\/tasks\\/([^/]+)`);
-    $(`tbody > tr > td:nth-child(${probColIdx+1})`, html).each((idx, elem) => {
+    $(`tbody > tr > td:nth-child(${probColIdx + 1})`, html).each((idx, elem) => {
       const $a = $(elem).children('a');
       const problemId = $a.attr('href').match(reg)[1];
       const title = $a.text();

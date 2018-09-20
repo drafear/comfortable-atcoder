@@ -1,6 +1,4 @@
-'use strict';
-
-$(() => {
+async function setupProblemTab() {
   const contest = Betalib.getContest();
   const tabs = $('#main-container .nav > li');
   for (let i = 0; i < tabs.length; ++i) {
@@ -9,24 +7,50 @@ $(() => {
     // Problemタブか
     if ($a.length > 0 && $a.attr('href').match(/\/tasks\/?$/)) {
       const $ul = $('<ul>').addClass('dropdown-menu').attr('role', 'menu');
-      Betalib.getProblems(contest).then(problems => {
-        if (problems.length === 0) {
-          return;
-        }
-        for (const prob of problems) {
-          $ul.append(
-            $('<li>').append(
-              $('<a>').attr('href', prob.getUrl(contest)).text(
-                `${prob.alphabet}. ${prob.title}`
-              )
+      const problems = await Betalib.getProblems(contest);
+      if (problems.length === 0) {
+        return;
+      }
+      for (const prob of problems) {
+        $ul.append(
+          $('<li>').append(
+            $('<a>').attr('href', prob.getUrl(contest)).text(
+              `${prob.alphabet}. ${prob.title}`
             )
-          );
-        }
-        // Hoverでdropdownできるように
-        $li.addClass('dropdown-hover').append($ul);
-        // ▽を追加
-        $a.append($('<span>').addClass('caret'));
-      });
+          )
+        );
+      }
+      // Hoverでdropdownできるように
+      $li.addClass('dropdown-hover').append($ul);
+      // ▽を追加
+      $a.append($('<span>').addClass('caret'));
     }
   }
+}
+
+function setupDropdownHover() {
+  // .dropdown-toggle のタブをhover設定する
+  $('#main-container .nav > li > a.dropdown-toggle').each((_, elem) => {
+    const $e = $(elem);
+    const url = $e.parent().find('> .dropdown-menu a:first-child').attr('href');
+    $e.removeClass('dropdown-toggle').attr({
+      'data-toggle': '',
+      href: url,
+    });
+    $e.parent().addClass('dropdown-hover');
+  });
+  // .dropdown-hover:hover 時のスタイル適用
+  $('.dropdown-hover').hover(
+    e => {
+      $(e.currentTarget).addClass('open');
+    },
+    e => {
+      $(e.currentTarget).removeClass('open');
+    }
+  );
+}
+
+$(() => {
+  setupProblemTab();
+  setupDropdownHover();
 });

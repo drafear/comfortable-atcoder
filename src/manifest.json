@@ -12,6 +12,12 @@
 			"run_at": "document_start"
 		},
 		{
+			"matches": ["*://beta.atcoder.jp/contests/*"],
+			"js": ["betalib.js", "dropdown-modify.js"],
+			"css": ["dropdown-modify.css"],
+			"run_at": "document_start"
+		},
+		{
 			"matches": ["*://*.contest.atcoder.jp/*"],
 			"exclude_matches": ["*://*.contest.atcoder.jp/users/*"],
 			"js": ["link-to-beta.js"],

@@ -29,17 +29,16 @@
     "src/lib"
   ],
   "xo": {
+    "envs": ["es6"],
     "space": true,
     "strict": true,
     "rules": {
+      "no-await-in-loop": 0,
       "no-undef": 0,
       "comma-dangle": [
         "error",
         "always-multiline"
       ]
-    },
-    "parserOptions": {
-      "ecmaVersion": 6
     }
   }
 }

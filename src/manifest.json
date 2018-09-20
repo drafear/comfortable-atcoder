@@ -14,7 +14,7 @@
 		{
 			"matches": ["*://beta.atcoder.jp/contests/*"],
 			"js": ["betalib.js", "dropdown-modify.js"],
-			"css": ["dropdown-hover.css"],
+			"css": ["dropdown-modify.css"],
 			"run_at": "document_start"
 		},
 		{

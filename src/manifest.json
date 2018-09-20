@@ -6,12 +6,14 @@
 	"content_scripts": [
 		{
 			"matches": ["*://beta.atcoder.jp/contests/*", "*://*.contest.atcoder.jp/*"],
+			"exclude_matches": ["*://*.contest.atcoder.jp/users/*"],
 			"js": ["lib/jquery.min.js", "lib/jquery.cookie.js", "all.js"],
 			"css": ["all.css"],
 			"run_at": "document_start"
 		},
 		{
 			"matches": ["*://*.contest.atcoder.jp/*"],
+			"exclude_matches": ["*://*.contest.atcoder.jp/users/*"],
 			"js": ["link-to-beta.js"],
 			"run_at": "document_start"
 		}

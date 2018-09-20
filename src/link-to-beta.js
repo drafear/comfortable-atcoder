@@ -10,6 +10,7 @@ const convertRules = [
   {from: '/custom_test', to: '/custom_test'},
   {from: '/submissions/me', to: '/submissions/me'},
   {from: '/submissions/all', to: '/submissions'},
+  {from: '/submissions/*', to: '/submissions/$1'},
   {from: '/clarifications/insert', to: '/clarifications/insert'},
 ];
 

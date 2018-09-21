@@ -1,5 +1,4 @@
 async function setupProblemTab() {
-  const contest = Betalib.getContest();
   const tabs = $('#main-container .nav > li');
   for (let i = 0; i < tabs.length; ++i) {
     const $li = tabs.eq(i);
@@ -7,14 +6,14 @@ async function setupProblemTab() {
     // Problemタブか
     if ($a.length > 0 && $a.attr('href').match(/\/tasks\/?$/)) {
       const $ul = $('<ul>').addClass('dropdown-menu').attr('role', 'menu');
-      const problems = await Betalib.getProblems(contest);
+      const problems = await Betalib.getProblems();
       if (problems.length === 0) {
         return;
       }
       for (const prob of problems) {
         $ul.append(
           $('<li>').append(
-            $('<a>').attr('href', prob.getUrl(contest)).text(
+            $('<a>').attr('href', prob.url).text(
               `${prob.alphabet}. ${prob.title}`
             )
           )

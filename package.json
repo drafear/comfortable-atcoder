@@ -33,6 +33,12 @@
     "space": true,
     "strict": true,
     "rules": {
+      "quotes": ["error", "single", {"avoidEscape": true}],
+      "no-negated-condition": 0,
+      "capitalized-comments": 0,
+      "no-constant-condition": ["error", {"checkLoops": false}],
+      "default-case": 0,
+      "no-irregular-whitespace": 0,
       "no-await-in-loop": 0,
       "no-undef": 0,
       "comma-dangle": [

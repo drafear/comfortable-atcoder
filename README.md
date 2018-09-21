@@ -1,6 +1,15 @@
 # Comfortable Atcoder
+This is a chrome extension which comforts your atcoder life.
+
+See [Features](#Features) for more detail.
+
 ## Installation
-Visit the [website](http://hoge.com) and
+1. Download Release.zip from [Releases](https://github.com/drafear/comfortable-atcoder/releases) and extract it
+
+2. Open [chrome://extensions/](chrome://extensions/)
+
+3. Drag & drop the directory to the page to load this chrome extension
+<!-- Visit the [website](http://hoge.com) and -->
 
 ## Features
 - Notify judge result of codes you submit

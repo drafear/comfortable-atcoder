@@ -7,30 +7,38 @@
 		{
 			"matches": ["*://beta.atcoder.jp/contests/*", "*://*.contest.atcoder.jp/*"],
 			"exclude_matches": ["*://*.contest.atcoder.jp/users/*"],
-			"js": ["lib/jquery.min.js", "lib/jquery.cookie.js", "all.js"],
-			"css": ["all.css"],
+			"js": ["lib/jquery.min.js", "lib/jquery.cookie.js", "content/all.js"],
+			"css": ["css/all.css"],
 			"run_at": "document_start"
 		},
 		{
 			"matches": ["*://beta.atcoder.jp/contests/*"],
-			"js": ["betalib.js", "dropdown-modify.js"],
-			"css": ["dropdown-modify.css"],
+			"js": ["content/betalib.js", "content/dropdown-modify.js"],
+			"css": ["css/dropdown-modify.css"],
+			"run_at": "document_start"
+		},
+		{
+			"matches": ["*://beta.atcoder.jp/contests/*/submissions/me"],
+			"js": ["content/result-notify.js"],
 			"run_at": "document_start"
 		},
 		{
 			"matches": ["*://*.contest.atcoder.jp/*"],
 			"exclude_matches": ["*://*.contest.atcoder.jp/users/*"],
-			"js": ["link-to-beta.js"],
+			"js": ["content/link-to-beta.js"],
 			"run_at": "document_start"
 		}
 	],
 	"web_accessible_resources": ["image/beta.png"],
 	"background": {
 		"scripts": [
-			"background.js"
+			"lib/jquery.min.js",
+			"content/betalib.js",
+			"background/submission-watcher.js"
 		],
 		"persistent": false
 	},
+	"permissions": ["notifications"],
 	"icons": {
 		"16": "image/icon.png",
 		"48": "image/icon.png",

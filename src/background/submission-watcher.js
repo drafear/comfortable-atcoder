@@ -133,7 +133,9 @@ async function watchSubmissionRegister(submission) {
   } catch (error) {
     throw error;
   } finally {
-    watchingSubmissionList.delete(submission.id);
+    setTimeout(() => {
+      watchingSubmissionList.delete(submission.id);
+    }, 1000);
   }
 }
 

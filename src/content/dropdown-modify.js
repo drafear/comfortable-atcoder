@@ -13,8 +13,8 @@ async function setupProblemTab() {
       for (const prob of problems) {
         $ul.append(
           $('<li>').append(
-            $('<a>').attr('href', prob.url).text(
-              `${prob.alphabet}. ${prob.title}`
+            $('<a>').attr('href', prob.getUrl(contest)).text(
+              `${prob.alphabet} - ${prob.title}`
             )
           )
         );

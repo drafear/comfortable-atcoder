@@ -163,6 +163,15 @@ const languages = [
 
 const groups = [
   new Group(
+    'Non-beta',
+    [
+      new Option(
+        'Beta Tab',
+        new Switch('enable', 'disable', 'dnd-html'),
+      ),
+    ],
+  ),
+  new Group(
     'Notification',
     [
       new Option(
@@ -184,7 +193,7 @@ const groups = [
       ),
       new Option(
         'Problem Tab',
-        new Switch('true', 'false', 'dropdown-problem'),
+        new Switch('enable', 'disable', 'dropdown-problem'),
       ),
     ],
   ),

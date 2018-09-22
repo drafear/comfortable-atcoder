@@ -40,7 +40,7 @@ CommonLib.runIfEnableAndLoad('beta-tab', () => {
                   src: chrome.extension.getURL('image/beta.png'),
                   alt: 'β',
                 })
-                .css({width: '14px', height: '14px', border: 0})
+                .css({width: '14px', height: '14px', border: 0, margin: 0, padding: 0})
             )
         )
       );

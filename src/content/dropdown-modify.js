@@ -39,14 +39,12 @@ function setupDropdownHover() {
     $e.parent().addClass('dropdown-hover');
   });
   // .dropdown-hover:hover 時のスタイル適用
-  $('.dropdown-hover').hover(
-    e => {
-      $(e.currentTarget).addClass('open');
-    },
-    e => {
-      $(e.currentTarget).removeClass('open');
-    }
-  );
+  $(document).on('mouseenter', '.dropdown-hover', e => {
+    $(e.currentTarget).addClass('open');
+  });
+  $(document).on('mouseleave', '.dropdown-hover', e => {
+    $(e.currentTarget).removeClass('open');
+  });
 }
 
 $(() => {

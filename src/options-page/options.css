@@ -1,0 +1,84 @@
+body {
+  margin: 0;
+}
+h2 {
+  color: hsl(0, 0%, 20%);
+  text-align: center;
+}
+div + div > h2 {
+  margin-top: 65px;
+}
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.settings-list > li {
+  display: flex;
+  margin: 15px;
+}
+.settings-list > li > * {
+  display: flex;
+  width: 50vw;
+}
+.settings-list > li > *:first-child {
+  padding-right: 2vw;
+  justify-content: flex-end;
+  align-items: center;
+}
+.settings-list > li > *:last-child {
+  padding-left: 2vw;
+  justify-content: flex-start;
+  align-items: center;
+}
+.switch input {
+  display: none;
+}
+.switch div {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90px;
+  height: 30px;
+  background-color: hsl(0, 0%, 60%);
+  transition: all 0.3s;
+  text-align: center;
+  color: white;
+  position: relative;
+  cursor: pointer;
+  border: 1px solid transparent;
+  outline: none;
+  padding-left: 10px;
+  padding-right: 0;
+}
+.switch div:hover {
+  border-color: hsl(0, 0%, 50%);
+}
+.switch div::before {
+  content: attr(data-off);
+}
+.switch div::after {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 26px;
+  background-color: white;
+  position: absolute;
+  left: 1px;
+  transition: all 0.3s;
+}
+.switch input:checked + div {
+  background-color: hsl(200, 80%, 60%);
+  padding-left: 0;
+  padding-right: 10px;
+}
+.switch input:checked + div:hover {
+  border-color: hsl(200, 80%, 50%);
+}
+.switch input:checked + div::before {
+  content: attr(data-on);
+}
+.switch input:checked + div::after {
+  left: 77px;
+}

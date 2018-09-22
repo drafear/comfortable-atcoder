@@ -17,9 +17,9 @@
   "scripts": {
     "build": "run-s build:*",
     "build:xo": "xo src/*.js",
-    "build:init": "rm -rf dist && mkdir dist",
+    "build:init": "rm -rf dist",
     "build:cp": "cp -r src dist && rm -rf dist/**/*.less",
-    "build:uglify": "cd src; for js in `ls *.js`; do uglifyjs --compress --mangle -o ../dist/$js -- $js; done",
+    "build:uglify": "cd src; for js in `ls **/*.js | grep -v ^lib`; do uglifyjs --compress --mangle -o ../dist/$js -- $js; done",
     "watch": "run-p watch:*",
     "watch:less": "less-watch-compiler src src",
     "package": "npm run build && zip -rq Release.zip dist"

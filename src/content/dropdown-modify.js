@@ -1,4 +1,5 @@
-async function setupProblemTab() {
+CommonLib.runIfEnableAndLoad('dropdown-problem', async () => {
+  const isHoverEnable = await CommonLib.isEnable('dropdown-hover');
   const tabs = $('#main-container .nav > li');
   for (let i = 0; i < tabs.length; ++i) {
     const $li = tabs.eq(i);
@@ -19,15 +20,23 @@ async function setupProblemTab() {
           )
         );
       }
-      // Hoverでdropdownできるように
-      $li.addClass('dropdown-hover').append($ul);
+      $li.append($ul);
+      if (isHoverEnable) {
+        // Hoverでdropdownできるように
+        $li.addClass('dropdown-hover');
+      } else {
+        $a.addClass('dropdown-toggle').attr({
+          href: '#',
+          'data-toggle': 'dropdown',
+        });
+      }
       // ▽を追加
       $a.append($('<span>').addClass('caret'));
     }
   }
-}
+});
 
-function setupDropdownHover() {
+CommonLib.runIfEnableAndLoad('dropdown-hover', () => {
   // .dropdown-toggle のタブをhover設定する
   $('#main-container .nav > li > a.dropdown-toggle').each((_, elem) => {
     const $e = $(elem);
@@ -45,9 +54,4 @@ function setupDropdownHover() {
   $(document).on('mouseleave', '.dropdown-hover', e => {
     $(e.currentTarget).removeClass('open');
   });
-}
-
-$(() => {
-  setupProblemTab();
-  setupDropdownHover();
 });

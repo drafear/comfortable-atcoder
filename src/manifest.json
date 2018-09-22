@@ -34,11 +34,13 @@
 		"scripts": [
 			"lib/jquery.min.js",
 			"content/betalib.js",
+			"background/oninstall.js",
 			"background/submission-watcher.js"
 		],
 		"persistent": false
 	},
-	"permissions": ["notifications"],
+	"options_page": "options-page/options.html",
+	"permissions": ["notifications", "storage"],
 	"icons": {
 		"16": "image/icon.png",
 		"48": "image/icon.png",

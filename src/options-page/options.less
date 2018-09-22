@@ -1,0 +1,91 @@
+body {
+  margin: 0;
+}
+
+h2 {
+  color: hsl(0, 0%, 20%);
+  text-align: center;
+}
+div + div > h2 {
+  margin-top: 65px;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.settings-list {
+  > li {
+    display: flex;
+    margin: 15px;
+    > * {
+      display: flex;
+      width: 50vw;
+    }
+    > *:first-child {
+      padding-right: 2vw;
+      justify-content: flex-end;
+      align-items: center;
+    }
+    > *:last-child {
+      padding-left: 2vw;
+      justify-content: flex-start;
+      align-items: center;
+    }
+  }
+}
+
+.switch {
+  @w: 90px;
+  @h: 30px;
+  @margin: 2px;
+  @bar-h: @h - @margin * 2;
+  @bar-w: 10px;
+  input {
+    display: none;
+  }
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: @w; height: @h;
+    background-color: hsl(0, 0%, 60%);
+    transition: all .3s;
+    text-align: center;
+    color: white;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid transparent;
+    outline: none;
+    &:hover {
+      border-color: hsl(0, 0%, 50%);
+    }
+    &::before {
+      content: attr(data-off);
+    }
+    &::after {
+      content: '';
+      display: block;
+      width: @bar-w;
+      height: @bar-h;
+      background-color: white;
+      position: absolute;
+      left: @margin;
+      transition: all .3s;
+    }
+  }
+  input:checked + div {
+    background-color: hsl(200, 80%, 60%);
+    &:hover {
+      border-color: hsl(200, 80%, 50%);
+    }
+    &::before {
+      content: attr(data-on);
+    }
+    &::after {
+      left: @w - @bar-w - @margin;
+    }
+  }
+}

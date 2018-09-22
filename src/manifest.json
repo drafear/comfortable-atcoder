@@ -34,6 +34,7 @@
 		"scripts": [
 			"lib/jquery.min.js",
 			"content/betalib.js",
+			"background/oninstall.js",
 			"background/submission-watcher.js"
 		],
 		"persistent": false

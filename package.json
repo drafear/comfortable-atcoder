@@ -24,6 +24,27 @@
     "watch:less": "less-watch-compiler src src",
     "package": "npm run build && zip -rq Release.zip dist"
   },
+  "release": {
+    "verifyConditions": [
+      "@semantic-release/github"
+    ],
+    "publish": [
+      {
+        "path": "@semantic-release/github",
+        "assets": [
+          {
+            "path": "Release.zip"
+          }
+        ]
+      }
+    ],
+    "success": [
+      "@semantic-release/github"
+    ],
+    "fail": [
+      "@semantic-release/github"
+    ]
+  },
   "eslintIgnore": [
     "dist",
     "src/lib"

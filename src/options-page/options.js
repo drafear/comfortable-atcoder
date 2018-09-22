@@ -18,7 +18,12 @@ class Switch {
       resolve => chrome.storage.sync.get(
         [this.storageKey],
         result => {
-          resolve(this.storageKey in result ? Boolean(result[this.storageKey]) : this.defaultValue);
+          if (this.storageKey in result) {
+            resolve(Boolean(result[this.storageKey]));
+          } else {
+            chrome.storage.sync.set({[this.storageKey]: this.defaultValue});
+            resolve(this.defaultValue);
+          }
         }
       )
     );
@@ -167,7 +172,7 @@ const groups = [
     [
       new Option(
         'Beta Tab',
-        new Switch('enable', 'disable', 'dnd-html'),
+        new Switch('enable', 'disable', 'beta-tab'),
       ),
     ],
   ),

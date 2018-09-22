@@ -47,6 +47,7 @@ ul {
     display: none;
   }
   div {
+    box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -59,6 +60,8 @@ ul {
     cursor: pointer;
     border: 1px solid transparent;
     outline: none;
+    padding-left: @bar-w;
+    padding-right: 0;
     &:hover {
       border-color: hsl(0, 0%, 50%);
     }
@@ -72,12 +75,14 @@ ul {
       height: @bar-h;
       background-color: white;
       position: absolute;
-      left: @margin;
+      left: @margin - 1px;
       transition: all .3s;
     }
   }
   input:checked + div {
     background-color: hsl(200, 80%, 60%);
+    padding-left: 0;
+    padding-right: @bar-w;
     &:hover {
       border-color: hsl(200, 80%, 50%);
     }
@@ -85,7 +90,7 @@ ul {
       content: attr(data-on);
     }
     &::after {
-      left: @w - @bar-w - @margin;
+      left: @w - @bar-w - @margin - 1px;
     }
   }
 }

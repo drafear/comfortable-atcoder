@@ -35,6 +35,7 @@ ul {
   display: none;
 }
 .switch div {
+  box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,6 +49,8 @@ ul {
   cursor: pointer;
   border: 1px solid transparent;
   outline: none;
+  padding-left: 10px;
+  padding-right: 0;
 }
 .switch div:hover {
   border-color: hsl(0, 0%, 50%);
@@ -62,11 +65,13 @@ ul {
   height: 26px;
   background-color: white;
   position: absolute;
-  left: 2px;
+  left: 1px;
   transition: all 0.3s;
 }
 .switch input:checked + div {
   background-color: hsl(200, 80%, 60%);
+  padding-left: 0;
+  padding-right: 10px;
 }
 .switch input:checked + div:hover {
   border-color: hsl(200, 80%, 50%);
@@ -75,5 +80,5 @@ ul {
   content: attr(data-on);
 }
 .switch input:checked + div::after {
-  left: 78px;
+  left: 77px;
 }

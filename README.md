@@ -13,7 +13,7 @@ See [Features](#Features) for more detail.
 
 ## Features
 - Notify judge result of codes you submit
-- ~~Notify clarifications on the contest page you open if you are `owner`~~
+- Notify new clarifications on the contest page you open
 - ~~Sync favorite users~~
 - Add a link tab to beta page on non-beta pages
 - Dropdown list of problems

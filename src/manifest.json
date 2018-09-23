@@ -14,7 +14,7 @@
 		},
 		{
 			"matches": ["*://beta.atcoder.jp/contests/*"],
-			"js": ["content/betalib.js", "content/dropdown-modify.js"],
+			"js": ["content/betalib.js", "content/dropdown-modify.js", "content/clar-notify.js"],
 			"css": ["css/dropdown-modify.css"],
 			"run_at": "document_start"
 		},
@@ -26,7 +26,6 @@
 		{
 			"matches": ["*://beta.atcoder.jp/contests/*/submit*", "*://beta.atcoder.jp/contests/*/tasks/*"],
 			"js": ["content/submission-warning.js"],
-			"css": ["css/submission-warning.css"],
 			"run_at": "document_start"
 		},
 		{
@@ -40,8 +39,10 @@
 	"background": {
 		"scripts": [
 			"lib/jquery.min.js",
+			"content/all.js",
 			"content/betalib.js",
 			"background/oninstall.js",
+			"background/notification.js",
 			"background/submission-watcher.js"
 		],
 		"persistent": false

@@ -44,7 +44,6 @@ class SubmissionWatcher {
     while (true) {
       const submission = await this.getCurrentSubmission();
       if (!submission.judgeStatus.isWaiting) {
-        let notificationId;
         let message = '';
         // ジャッジ中か
         if (submission.judgeStatus.now !== undefined) {
@@ -59,26 +58,15 @@ class SubmissionWatcher {
         if (submission.memoryUsage) {
           message += `\n${submission.memoryUsage}`;
         }
-        chrome.notifications.create({
-          type: 'basic',
-          iconUrl: makeJudgeStatusImageUrl(submission.judgeStatus.text),
-          title: submission.probTitle,
-          message,
-        }, id => {
-          notificationId = id;
+        createNotification({
+          data: {
+            type: 'basic',
+            iconUrl: makeJudgeStatusImageUrl(submission.judgeStatus.text),
+            title: submission.probTitle,
+            message,
+          },
+          href: submission.detailAbsoluteUrl,
         });
-        const clickHandler = id => {
-          if (id !== notificationId) {
-            return;
-          }
-          window.open(submission.detailAbsoluteUrl);
-        };
-        const closeHandler = () => {
-          chrome.notifications.onClicked.removeListener(clickHandler);
-          chrome.notifications.onClosed.removeListener(closeHandler);
-        };
-        chrome.notifications.onClicked.addListener(clickHandler);
-        chrome.notifications.onClosed.addListener(closeHandler);
         break;
       }
       const curTime = Date.now();
@@ -139,12 +127,8 @@ async function watchSubmissionRegister(submission) {
   }
 }
 
-chrome.runtime.onMessage.addListener(({type, data}, sender, reply) => {
-  _ = sender;
-  _ = reply;
-  switch (type) {
-    case 'watch-submission-register':
-      watchSubmissionRegister(data);
-      break;
+chrome.runtime.onMessage.addListener(({type, data}) => {
+  if (type === 'watch-submission-register') {
+    watchSubmissionRegister(data);
   }
 });

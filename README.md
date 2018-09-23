@@ -13,13 +13,11 @@ See [Features](#Features) for more detail.
 
 ## Features
 - Notify judge result of codes you submit
-- ~~Notify clarifications on the contest page you open when you are `owner`~~
-- ~~Colorful problem page~~
+- ~~Notify clarifications on the contest page you open if you are `owner`~~
 - ~~Sync favorite users~~
 - Add a link tab to beta page on non-beta pages
 - Dropdown list of problems
 - Warn if you select specific languages for submission such as `text`, `bash` and so on (configurable)
-- ~~Download submitted codes~~
 - Disable/Enable them
 
 ## Developing

@@ -2,7 +2,8 @@
 	"name": "Comfortable Atcoder",
 	"version": "0.00",
 	"manifest_version": 2,
-	"description": "* Notify judge result of codes you submit\n* Notify clarifications on the contest page you open when you are `owner`\n* Colorful problem page\n* Add a link tab to beta page on non-beta pages\n* Dropdown list of problems\n* Warn if you submit with specific languages such as `text`, `bash` and so on (configurable)\n* Download submitted codes\n* Disable/Enable them\n",
+  "description": "Comfort your atcoder life. For more detail, visit https://github.com/drafear/comfortable-atcoder",
+  "author": "drafear",
 	"content_scripts": [
 		{
 			"matches": ["*://beta.atcoder.jp/contests/*", "*://*.contest.atcoder.jp/*"],
@@ -13,13 +14,18 @@
 		},
 		{
 			"matches": ["*://beta.atcoder.jp/contests/*"],
-			"js": ["content/betalib.js", "content/dropdown-modify.js"],
+			"js": ["content/betalib.js", "content/dropdown-modify.js", "content/clar-notify.js"],
 			"css": ["css/dropdown-modify.css"],
 			"run_at": "document_start"
 		},
 		{
 			"matches": ["*://beta.atcoder.jp/contests/*/submissions/me"],
 			"js": ["content/result-notify.js"],
+			"run_at": "document_start"
+		},
+		{
+			"matches": ["*://beta.atcoder.jp/contests/*/submit*", "*://beta.atcoder.jp/contests/*/tasks/*"],
+			"js": ["content/submission-warning.js"],
 			"run_at": "document_start"
 		},
 		{
@@ -33,8 +39,10 @@
 	"background": {
 		"scripts": [
 			"lib/jquery.min.js",
+			"content/all.js",
 			"content/betalib.js",
 			"background/oninstall.js",
+			"background/notification.js",
 			"background/submission-watcher.js"
 		],
 		"persistent": false

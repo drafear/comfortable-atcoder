@@ -25,4 +25,12 @@ window.CommonLib = class {
       });
     });
   }
+
+  static sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  static createNotification(params) {
+    chrome.runtime.sendMessage({type: 'create-notification', data: params});
+  }
 };

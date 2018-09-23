@@ -203,15 +203,6 @@ const groups = [
     ],
   ),
   new Group(
-    'Edit',
-    [
-      new Option(
-        'D & D .html',
-        new Switch('enable', 'disable', 'dnd-html'),
-      ),
-    ],
-  ),
-  new Group(
     'Warning on Submission',
     [
       new Option('Enable', new Switch('enable', 'disable', 'submission-warning')),

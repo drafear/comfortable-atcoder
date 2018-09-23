@@ -159,8 +159,4 @@ window.Betalib = class {
     });
     return res;
   }
-
-  static sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
 };

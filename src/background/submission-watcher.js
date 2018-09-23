@@ -40,7 +40,7 @@ class SubmissionWatcher {
     const startTime = Date.now();
     let prevTime = this.startTime;
     let prevStatus = this.submission.judgeStatus;
-    await Betalib.sleep(100); // Rejudge用
+    await CommonLib.sleep(100); // Rejudge用
     while (true) {
       const submission = await this.getCurrentSubmission();
       if (!submission.judgeStatus.isWaiting) {
@@ -94,7 +94,7 @@ class SubmissionWatcher {
       }
       prevTime = curTime;
       prevStatus = submission.judgeStatus;
-      await Betalib.sleep(sleepMilliseconds);
+      await CommonLib.sleep(sleepMilliseconds);
     }
   }
 

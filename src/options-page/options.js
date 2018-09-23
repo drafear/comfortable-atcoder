@@ -206,7 +206,6 @@ const groups = [
     'Edit',
     [
       new Option(
-
         'D & D .html',
         new Switch('enable', 'disable', 'dnd-html'),
       ),
@@ -214,7 +213,10 @@ const groups = [
   ),
   new Group(
     'Warning on Submission',
-    makeWarnOptions(languages),
+    [
+      new Option('Enable', new Switch('enable', 'disable', 'submission-warning')),
+      ...makeWarnOptions(languages),
+    ],
   ),
 ];
 

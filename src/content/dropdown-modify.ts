@@ -1,12 +1,17 @@
-CommonLib.runIfEnableAndLoad('dropdown-problem', async () => {
-  const isHoverEnable = await CommonLib.isEnable('dropdown-hover');
+import * as Commonlib from './all';
+import * as Betalib from './betalib';
+
+Commonlib.runIfEnableAndLoad('dropdown-problem', async () => {
+  const isHoverEnable = await Commonlib.isEnable('dropdown-hover');
   const tabs = $('#main-container .nav > li');
   for (let i = 0; i < tabs.length; ++i) {
     const $li = tabs.eq(i);
     const $a = $('a', $li);
     // Problemタブか
-    if ($a.length > 0 && $a.attr('href').match(/\/tasks\/?$/)) {
-      const $ul = $('<ul>').addClass('dropdown-menu').attr('role', 'menu');
+    if ($a.length > 0 && ($a.attr('href') as string).match(/\/tasks\/?$/)) {
+      const $ul = $('<ul>')
+        .addClass('dropdown-menu')
+        .attr('role', 'menu');
       const problems = await Betalib.getProblems();
       if (problems.length === 0) {
         return;
@@ -14,10 +19,14 @@ CommonLib.runIfEnableAndLoad('dropdown-problem', async () => {
       for (const prob of problems) {
         $ul.append(
           $('<li>').append(
-            $('<a>').attr('href', prob.url).html(
-              `<span style='font-family: Consolas, "Courier New", monospace''>${prob.alphabet} - </span>${prob.title}`
-            )
-          )
+            $('<a>')
+              .attr('href', prob.url)
+              .html(
+                `<span style='font-family: Consolas, "Courier New", monospace''>${prob.alphabet} - </span>${
+                  prob.title
+                }`,
+              ),
+          ),
         );
       }
       $li.append($ul);
@@ -36,11 +45,14 @@ CommonLib.runIfEnableAndLoad('dropdown-problem', async () => {
   }
 });
 
-CommonLib.runIfEnableAndLoad('dropdown-hover', () => {
+Commonlib.runIfEnableAndLoad('dropdown-hover', () => {
   // .dropdown-toggle のタブをhover設定する
   $('#main-container .nav > li > a.dropdown-toggle').each((_, elem) => {
     const $e = $(elem);
-    const url = $e.parent().find('> .dropdown-menu a:first-child').attr('href');
+    const url = $e
+      .parent()
+      .find('> .dropdown-menu a:first-child')
+      .attr('href');
     $e.removeClass('dropdown-toggle').attr({
       'data-toggle': '',
       href: url,

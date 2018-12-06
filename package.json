@@ -1,13 +1,34 @@
 {
   "name": "comfortable-atcoder",
   "description": "Comfort your atcoder life. For more detail, visit https://github.com/drafear/comfortable-atcoder",
+  "scripts": {
+    "build": "run-s build:*",
+    "build:xo": "xo src/**/*.ts",
+    "build:init": "rm -rf dist",
+    "build:cp": "cp -r src dist && rm -rf dist/**/*.less",
+    "build:ts": "parcel build --target node src/**/*.ts",
+    "start": "npm run watch",
+    "watch": "run-p watch:*",
+    "watch:less": "less-watch-compiler src src",
+    "watch:build": "parcel --target node src/**/*.ts",
+    "watch:test": "jest --watch",
+    "package": "npm run build && zip -rq Release.zip dist"
+  },
   "dependencies": {},
-  "default_locale": "en",
   "devDependencies": {
+    "@types/chrome": "0.0.75",
+    "@types/jest": "23.3.10",
+    "@types/jquery": "3.3.23",
+    "eslint-config-xo-typescript": "0.3.0",
+    "eslint-plugin-typescript": "0.14.0",
+    "jest": "23.6.0",
     "less-watch-compiler": "1.11.3",
     "npm-run-all": "4.1.3",
+    "parcel": "1.10.3",
     "semantic-release": "15.9.15",
-    "uglify-es": "3.3.9",
+    "ts-jest": "23.10.5",
+    "typescript": "3.2.1",
+    "typescript-eslint-parser": "21.0.2",
     "xo": "0.23.0"
   },
   "engines": {
@@ -15,15 +36,29 @@
     "npm": "6.3"
   },
   "private": true,
-  "scripts": {
-    "build": "run-s build:*",
-    "build:xo": "xo src/*.js",
-    "build:init": "rm -rf dist",
-    "build:cp": "cp -r src dist && rm -rf dist/**/*.less",
-    "build:uglify": "cd src; for js in `ls **/*.js | grep -v ^lib`; do uglifyjs --compress --mangle -o ../dist/$js -- $js; done",
-    "watch": "run-p watch:*",
-    "watch:less": "less-watch-compiler src src",
-    "package": "npm run build && zip -rq Release.zip dist"
+  "default_locale": "en",
+  "eslintIgnore": [
+    "dist",
+    "src/lib"
+  ],
+  "jest": {
+    "testMatch": [
+      "**/*.test.(js|ts)"
+    ],
+    "transform": {
+      ".\\.ts$": "ts-jest"
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ]
+  },
+  "prettier": {
+    "bracketSpacing": true,
+    "printWidth": 120,
+    "singleQuote": true,
+    "trailingComma": "all"
   },
   "release": {
     "verifyConditions": [
@@ -46,20 +81,32 @@
       "@semantic-release/github"
     ]
   },
-  "eslintIgnore": [
-    "dist",
-    "src/lib"
-  ],
   "xo": {
-    "envs": ["es6"],
+    "extends": "xo-typescript",
+    "prettier": true,
+    "envs": [
+      "es6"
+    ],
     "space": true,
     "strict": true,
     "rules": {
-      "quotes": ["error", "single", {"avoidEscape": true}],
+      "quotes": [
+        "error",
+        "single",
+        {
+          "avoidEscape": true
+        }
+      ],
+      "typescript/explicit-function-return-type": 0,
       "no-alert": 0,
       "no-negated-condition": 0,
       "capitalized-comments": 0,
-      "no-constant-condition": ["error", {"checkLoops": false}],
+      "no-constant-condition": [
+        "error",
+        {
+          "checkLoops": false
+        }
+      ],
       "default-case": 0,
       "no-irregular-whitespace": 0,
       "no-await-in-loop": 0,

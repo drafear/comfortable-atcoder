@@ -17,9 +17,6 @@
   "javascript.format.enable": false,
   "javascript.referencesCodeLens.enabled": true,
   "javascript.updateImportsOnFileMove.enabled": "always",
-  "markdown.extension.showExplorer": true,
-  "markdown.extension.tableFormatter.enabled": true,
-  "markdown.extension.toc.githubCompatibility": true,
   "npm.enableScriptExplorer": true,
   "npm.packageManager": "npm",
   "trailing-spaces.highlightCurrentLine": false,
@@ -27,5 +24,6 @@
   "typescript.referencesCodeLens.enabled": true,
   "workbench.statusBar.feedback.visible": false,
   "xo.format.enable": true,
-  "xo.enable": true
+  "xo.enable": true,
+  "gitlens.views.repositories.files.layout": "list"
 }

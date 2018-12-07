@@ -4,6 +4,7 @@ build:
     - script:
       name: Install dependencies
       code: |
+        rm -rf ./node_modules
         npm i xo
 
     - script:

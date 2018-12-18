@@ -1,6 +1,6 @@
 {
 	"name": "Comfortable Atcoder",
-	"version": "1.3.2",
+	"version": "1.5.2",
 	"manifest_version": 2,
   "description": "Comfort your atcoder life. For more detail, visit https://github.com/drafear/comfortable-atcoder",
   "author": "drafear",
@@ -29,7 +29,7 @@
 			"run_at": "document_start"
 		}
 	],
-	"web_accessible_resources": ["image/png"],
+	"web_accessible_resources": ["image/beta.png"],
 	"background": {
 		"scripts": [
 			"lib/jquery.min.js",

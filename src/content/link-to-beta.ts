@@ -18,7 +18,7 @@ const convertRules = [
 
 function getBetaUrl(): string {
   const contestId = (location.host.match(/^(.*).contest.atcoder.jp$/) as string[])[1];
-  const prefix = `https://beta.atcoder.jp/contests/${contestId}`;
+  const prefix = `https://atcoder.jp/contests/${contestId}`;
   for (const rule of convertRules) {
     const reg = new RegExp('^' + rule.from.replace(/\*/g, '([^\\/]+)') + '\\/?$');
     if (location.pathname.match(reg)) {

@@ -42,7 +42,7 @@
 		"persistent": false
 	},
 	"options_page": "options-page/options.html",
-	"permissions": ["notifications", "storage"],
+	"permissions": ["notifications", "storage", "<all_urls>"],
 	"icons": {
 		"16": "image/icon.png",
 		"48": "image/icon.png",

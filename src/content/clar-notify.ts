@@ -1,13 +1,19 @@
-CommonLib.runIfEnableAndLoad('notify-clarification', async () => {
+import * as Commonlib from './all';
+import * as Betalib from './betalib';
+
+function getNotifyCount(): number {
+  const text = $('#clar-badge').text();
+  const res = /\d+/.test(text) ? Number(text) : 0;
+  return res;
+}
+
+Commonlib.runIfEnableAndLoad('notify-clarification', async () => {
   const contest = Betalib.getCurrentContest();
-  function getNotifyCount() {
-    return $('#clar-badge').text();
-  }
   let prev = getNotifyCount();
   while (true) {
     const cur = getNotifyCount();
-    if (prev !== cur) {
-      CommonLib.createNotification({
+    if (cur > prev) {
+      Commonlib.createNotification({
         data: {
           type: 'basic',
           iconUrl: chrome.extension.getURL('image/question.png'),
@@ -18,6 +24,6 @@ CommonLib.runIfEnableAndLoad('notify-clarification', async () => {
       });
       prev = cur;
     }
-    await CommonLib.sleep(1000);
+    await Commonlib.sleep(1000);
   }
 });

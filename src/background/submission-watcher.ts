@@ -1,17 +1,26 @@
-const judgeResultImageStyle = {
-  AC: {backColor: '#5cb85c'},
-  WA: {backColor: 'hsl(0, 84%, 62%)'},
-  default: {foreColor: 'white', backColor: '#f0ad4e'},
+import * as Commonlib from '../content/all';
+import * as Betalib from '../content/betalib';
+import { createNotification } from './notification';
+
+interface JudgeResultImageStyle {
+  foreColor?: string;
+  backColor?: string;
+}
+
+const judgeResultImageStyle: { [key: string]: JudgeResultImageStyle } = {
+  AC: { backColor: '#5cb85c' },
+  WA: { backColor: 'hsl(0, 84%, 62%)' },
 };
 
-function makeJudgeStatusImageUrl(judgeResult) {
-  let {foreColor, backColor} = judgeResultImageStyle.default;
+function makeJudgeStatusImageUrl(judgeResult: string): string {
+  let foreColor = 'white';
+  let backColor = '#f0ad4e';
   if (judgeResult in judgeResultImageStyle) {
     const newStyle = judgeResultImageStyle[judgeResult];
-    if ('foreColor' in newStyle) {
+    if (newStyle.foreColor !== undefined) {
       foreColor = newStyle.foreColor;
     }
-    if ('backColor' in newStyle) {
+    if (newStyle.backColor !== undefined) {
       backColor = newStyle.backColor;
     }
   }
@@ -19,6 +28,7 @@ function makeJudgeStatusImageUrl(judgeResult) {
   canvas.width = 192;
   canvas.height = 192;
   const ctx = canvas.getContext('2d');
+  if (ctx === null) throw new Error("canvas.getContext('2d') was failed");
   ctx.fillStyle = backColor;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.font = "80px 'Lato','Helvetica Neue',arial,sans-serif";
@@ -32,15 +42,17 @@ function makeJudgeStatusImageUrl(judgeResult) {
 const watchingSubmissionList = new Set();
 
 class SubmissionWatcher {
-  constructor(submission) {
+  public readonly submission: Betalib.Submission;
+
+  constructor(submission: Betalib.Submission) {
     this.submission = submission;
   }
 
   async start(timeout = 30 * 60 * 1000) {
     const startTime = Date.now();
-    let prevTime = this.startTime;
+    let prevTime = startTime;
     let prevStatus = this.submission.judgeStatus;
-    await CommonLib.sleep(100); // Rejudge用
+    await Commonlib.sleep(100); // Rejudge用
     while (true) {
       const submission = await this.getCurrentSubmission();
       if (!submission.judgeStatus.isWaiting) {
@@ -76,42 +88,47 @@ class SubmissionWatcher {
       const dt = curTime - prevTime;
       let sleepMilliseconds = 5 * 1000;
       if (prevStatus.now !== undefined) {
-        const diff = submission.judgeStatus.now - prevStatus.now;
-        const estimated = dt === 0 ? 0 : submission.judgeStatus.rest * dt / (diff + 1);
+        const diff = (submission.judgeStatus.now as number) - prevStatus.now;
+        const estimated = dt === 0 ? 0 : ((submission.judgeStatus.rest as number) * dt) / (diff + 1);
         sleepMilliseconds = Math.min(sleepMilliseconds, Math.max(estimated, 1 * 1000));
       }
       prevTime = curTime;
       prevStatus = submission.judgeStatus;
-      await CommonLib.sleep(sleepMilliseconds);
+      await Commonlib.sleep(sleepMilliseconds);
     }
   }
 
   async getCurrentSubmission() {
-    const response = await fetch(this.submission.detailAbsoluteUrl, {cache: 'no-cache'});
+    const response = await fetch(this.submission.detailAbsoluteUrl, { cache: 'no-cache' });
     const html = await response.text();
     const root = new DOMParser().parseFromString(html, 'text/html');
-    const $table = $(root.querySelector('table'));
+    const $table = $(root.querySelector('table') as HTMLTableElement);
     const $ths = $table.find('th');
-    const indexes = getIndexes($ths, {
+    const indexes = Betalib.getIndexes($ths, {
       score: ['点', 'Score'],
       status: ['結果', 'Status'],
       time: ['実行時間', 'Exec Time'],
       memory: ['メモリ', 'Memory'],
     });
     if (!('status' in indexes)) {
-      throw new Error('getCurrentSubmission: Can\'t get status');
+      throw new Error("getCurrentSubmission: Can't get status");
     }
     const $tds = $table.find('td');
-    const {id: submissionId, contest, probTitle} = this.submission;
+    const { id: submissionId, contest, probTitle } = this.submission;
     const score = $tds.eq(indexes.score).text();
-    const judgeStatus = parseJudgeStatus($tds.eq(indexes.status).children('span').text());
+    const judgeStatus = Betalib.parseJudgeStatus(
+      $tds
+        .eq(indexes.status)
+        .children('span')
+        .text(),
+    );
     const execTime = 'time' in indexes ? $tds.eq(indexes.time).text() : undefined;
     const memoryUsage = 'memory' in indexes ? $tds.eq(indexes.memory).text() : undefined;
-    return new Submission({contest, id: submissionId, probTitle, score, judgeStatus, execTime, memoryUsage});
+    return new Betalib.Submission({ contest, id: submissionId, probTitle, score, judgeStatus, execTime, memoryUsage });
   }
 }
 
-async function watchSubmissionRegister(submission) {
+async function watchSubmissionRegister(submission: Betalib.Submission): Promise<void> {
   if (watchingSubmissionList.has(submission.id)) {
     return;
   }
@@ -127,7 +144,7 @@ async function watchSubmissionRegister(submission) {
   }
 }
 
-chrome.runtime.onMessage.addListener(({type, data}) => {
+chrome.runtime.onMessage.addListener(({ type, data }) => {
   if (type === 'watch-submission-register') {
     watchSubmissionRegister(data);
   }

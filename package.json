@@ -101,6 +101,7 @@
         }
       ],
       "typescript/explicit-function-return-type": 0,
+      "no-useless-constructor": 0,
       "no-alert": 0,
       "no-negated-condition": 0,
       "capitalized-comments": 0,

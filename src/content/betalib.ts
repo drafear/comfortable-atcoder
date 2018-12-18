@@ -1,4 +1,4 @@
-const betaHost = 'beta.atcoder.jp';
+const betaHost = 'atcoder.jp';
 
 export class Contest {
   public readonly url: string;
@@ -165,6 +165,9 @@ export async function getMySubmissions(): Promise<Submission[]> {
     time: ['実行時間', 'Exec Time'],
     memory: ['メモリ', 'Memory'],
   });
+  if ($th.length === 0) {
+    return [];
+  }
   if (!('status' in indexes)) {
     throw new Error("Betalib: getMySubmissions: Can't get status");
   }

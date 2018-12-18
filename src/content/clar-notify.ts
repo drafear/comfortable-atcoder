@@ -20,7 +20,7 @@ Commonlib.runIfEnableAndLoad('notify-clarification', async () => {
           title: 'Atcoder',
           message: 'New Clarification',
         },
-        href: `https://beta.atcoder.jp/contests/${contest.id}/clarifications`,
+        href: `https://atcoder.jp/contests/${contest.id}/clarifications`,
       });
       prev = cur;
     }

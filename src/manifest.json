@@ -1,6 +1,6 @@
 {
 	"name": "Comfortable Atcoder",
-	"version": "1.5.2",
+	"version": "1.5.3",
 	"manifest_version": 2,
   "description": "Comfort your atcoder life. For more detail, visit https://github.com/drafear/comfortable-atcoder",
   "author": "drafear",
@@ -42,7 +42,7 @@
 		"persistent": false
 	},
 	"options_page": "options-page/options.html",
-	"permissions": ["notifications", "storage"],
+	"permissions": ["notifications", "storage", "<all_urls>"],
 	"icons": {
 		"16": "image/icon.png",
 		"48": "image/icon.png",

@@ -1,49 +1,47 @@
 class Language {
-  constructor(id, name) {
-    this.id = id;
-    this.name = name;
-  }
+  constructor(public readonly id: string, public readonly name: string) { }
 }
 
 class Switch {
-  constructor(onText, offText, storageKey, defaultValue = true) {
-    this.onText = onText;
-    this.offText = offText;
-    this.storageKey = storageKey;
+  public readonly defaultValue: boolean;
+
+  constructor(
+    public readonly onText: string,
+    public readonly offText: string,
+    public readonly storageKey: string,
+    defaultValue = true,
+  ) {
     this.defaultValue = defaultValue;
   }
 
-  readValue() {
-    return new Promise(
-      resolve => chrome.storage.sync.get(
-        [this.storageKey],
-        result => {
-          if (this.storageKey in result) {
-            resolve(Boolean(result[this.storageKey]));
-          } else {
-            chrome.storage.sync.set({[this.storageKey]: this.defaultValue});
-            resolve(this.defaultValue);
-          }
+  readValue(): Promise<boolean> {
+    return new Promise(resolve =>
+      chrome.storage.sync.get([this.storageKey], result => {
+        if (this.storageKey in result) {
+          resolve(Boolean(result[this.storageKey]));
+        } else {
+          chrome.storage.sync.set({ [this.storageKey]: this.defaultValue });
+          resolve(this.defaultValue);
         }
-      )
+      }),
     );
   }
 
-  cbChandeListener(e) {
-    const value = e.currentTarget.checked;
-    const data = {};
+  cbChangeListener(e: Event) {
+    const value = (e.currentTarget as HTMLInputElement).checked;
+    const data: { [key: string]: boolean } = {};
     data[this.storageKey] = value;
     chrome.storage.sync.set(data);
   }
 
   async toElem() {
-    const value = await this.readValue();
+    const value: boolean = await this.readValue();
     const label = document.createElement('label');
     label.classList.add('switch');
     const cb = document.createElement('input');
     cb.type = 'checkbox';
     cb.checked = value;
-    cb.addEventListener('change', this.cbChandeListener.bind(this));
+    cb.addEventListener('change', this.cbChangeListener.bind(this));
     label.appendChild(cb);
     const div = document.createElement('div');
     div.dataset.on = this.onText;
@@ -52,11 +50,8 @@ class Switch {
     return label;
   }
 }
-class Option {
-  constructor(name, component) {
-    this.name = name;
-    this.component = component;
-  }
+class Choice {
+  constructor(public readonly name: string, public readonly component: Switch) { }
 
   async toElem() {
     const li = document.createElement('li');
@@ -71,10 +66,7 @@ class Option {
 }
 
 class Group {
-  constructor(name, options) {
-    this.name = name;
-    this.options = options;
-  }
+  constructor(public readonly name: string, public readonly choices: Choice[]) { }
 
   async toElem() {
     const div = document.createElement('div');
@@ -83,7 +75,7 @@ class Group {
     div.appendChild(header);
     const ul = document.createElement('ul');
     ul.classList.add('settings-list');
-    for (const option of this.options) {
+    for (const option of this.choices) {
       ul.appendChild(await option.toElem());
     }
     div.appendChild(ul);
@@ -91,21 +83,16 @@ class Group {
   }
 }
 
-function makeWarnOptions(langs) {
+const makeWarnChoices = (langs: Language[]): Choice[] => {
   // Bash, Text
   const defaults = new Set(['3001', '3027']);
-  const options = [];
+  const choices: Choice[] = [];
   for (const lang of langs) {
     const defaultValue = Boolean(defaults.has(lang.id));
-    options.push(
-      new Option(
-        lang.name,
-        new Switch('on', 'off', `warn-${lang.id}`, defaultValue)
-      )
-    );
+    choices.push(new Choice(lang.name, new Switch('on', 'off', `warn-${lang.id}`, defaultValue)));
   }
-  return options;
-}
+  return choices;
+};
 
 const languages = [
   new Language('3003', 'C++14 (GCC)'),
@@ -167,48 +154,20 @@ const languages = [
 ];
 
 const groups = [
-  new Group(
-    'Non-beta',
-    [
-      new Option(
-        'Beta Tab',
-        new Switch('enable', 'disable', 'beta-tab'),
-      ),
-    ],
-  ),
-  new Group(
-    'Notification',
-    [
-      new Option(
-        'Judge Result',
-        new Switch('on', 'off', 'notify-judge-result'),
-      ),
-      new Option(
-        'Clarification',
-        new Switch('on', 'off', 'notify-clarification'),
-      ),
-    ],
-  ),
-  new Group(
-    'Dropdown',
-    [
-      new Option(
-        'Hover',
-        new Switch('hover', 'click', 'dropdown-hover'),
-      ),
-      new Option(
-        'Problem Tab',
-        new Switch('enable', 'disable', 'dropdown-problem'),
-      ),
-    ],
-  ),
-  new Group(
-    'Warning on Submission',
-    [
-      new Option('Enable', new Switch('enable', 'disable', 'submission-warning')),
-      ...makeWarnOptions(languages),
-    ],
-  ),
+  new Group('Non-beta', [new Choice('Beta Tab', new Switch('enable', 'disable', 'beta-tab'))]),
+  new Group('Notification', [
+    new Choice('Judge Result', new Switch('on', 'off', 'notify-judge-result')),
+    new Choice('Clarification', new Switch('on', 'off', 'notify-clarification')),
+  ]),
+  new Group('Dropdown', [
+    new Choice('Hover', new Switch('hover', 'click', 'dropdown-hover')),
+    new Choice('Problem Tab', new Switch('enable', 'disable', 'dropdown-problem')),
+  ]),
+  new Group('Tweet Button', [new Choice('Enable', new Switch('enable', 'disable', 'add-tweet-button'))]),
+  new Group('Warning on Submission', [
+    new Choice('Enable', new Switch('enable', 'disable', 'submission-warning')),
+    ...makeWarnChoices(languages),
+  ]),
 ];
 
 document.addEventListener('DOMContentLoaded', async () => {

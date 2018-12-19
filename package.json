@@ -3,13 +3,13 @@
   "description": "Comfort your atcoder life. For more detail, visit https://github.com/drafear/comfortable-atcoder",
   "scripts": {
     "build": "run-s build:*",
-    "build:xo": "xo src/**/*.ts",
     "build:init": "rm -rf dist",
     "build:cp": "cp -r src dist && rm -rf dist/**/*.less",
+    "build:css": "less-watch-compiler --run-once src dist",
     "build:ts": "parcel build --target node src/**/*.ts",
     "start": "npm run watch",
     "watch": "run-p watch:*",
-    "watch:less": "less-watch-compiler src src",
+    "watch:less": "less-watch-compiler src dist",
     "watch:build": "parcel --target node src/**/*.ts",
     "watch:test": "jest --watch",
     "package": "npm run build && zip -rq Release.zip dist"
@@ -101,6 +101,7 @@
         }
       ],
       "typescript/explicit-function-return-type": 0,
+      "no-useless-constructor": 0,
       "no-alert": 0,
       "no-negated-condition": 0,
       "capitalized-comments": 0,

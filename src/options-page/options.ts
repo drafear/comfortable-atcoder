@@ -1,5 +1,5 @@
 class Language {
-  constructor(public readonly id: string, public readonly name: string) {}
+  constructor(public readonly id: string, public readonly name: string) { }
 }
 
 class Switch {
@@ -27,7 +27,7 @@ class Switch {
     );
   }
 
-  cbChandeListener(e: Event) {
+  cbChangeListener(e: Event) {
     const value = (e.currentTarget as HTMLInputElement).checked;
     const data: { [key: string]: boolean } = {};
     data[this.storageKey] = value;
@@ -41,7 +41,7 @@ class Switch {
     const cb = document.createElement('input');
     cb.type = 'checkbox';
     cb.checked = value;
-    cb.addEventListener('change', this.cbChandeListener.bind(this));
+    cb.addEventListener('change', this.cbChangeListener.bind(this));
     label.appendChild(cb);
     const div = document.createElement('div');
     div.dataset.on = this.onText;
@@ -51,7 +51,7 @@ class Switch {
   }
 }
 class Choice {
-  constructor(public readonly name: string, public readonly component: Switch) {}
+  constructor(public readonly name: string, public readonly component: Switch) { }
 
   async toElem() {
     const li = document.createElement('li');
@@ -66,7 +66,7 @@ class Choice {
 }
 
 class Group {
-  constructor(public readonly name: string, public readonly choices: Choice[]) {}
+  constructor(public readonly name: string, public readonly choices: Choice[]) { }
 
   async toElem() {
     const div = document.createElement('div');

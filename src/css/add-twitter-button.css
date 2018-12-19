@@ -1,0 +1,9 @@
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+.tweet {
+  padding: 3px;
+  background-color: hsl(220, 70%, 60%);
+  color: white;
+}

@@ -25,5 +25,19 @@
   "workbench.statusBar.feedback.visible": false,
   "xo.format.enable": true,
   "xo.enable": true,
-  "gitlens.views.repositories.files.layout": "list"
+  "gitlens.views.repositories.files.layout": "list",
+  "cSpell.words": [
+    "atcoder",
+    "betalib",
+    "brainfuck",
+    "caml",
+    "clar",
+    "commonlib",
+    "drafear",
+    "dropdown",
+    "glyphicon",
+    "o",
+    "oninstall",
+    "unlambda"
+  ]
 }

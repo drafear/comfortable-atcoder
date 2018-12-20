@@ -122,6 +122,45 @@ export class JudgeStatus {
   }
 }
 
+export abstract class ContestResult {
+  constructor(public readonly date: Date, public readonly contestName: string, public readonly contestId: string, public readonly rank: number, public readonly diff: number) { }
+  abstract isRated(): boolean;
+  getRankStr(): string {
+    switch (this.rank % 10) {
+      case 1:
+        return `${this.rank}st`;
+      case 2:
+        return `${this.rank}nd`;
+      case 3:
+        return `${this.rank}rd`;
+      default:
+        return `${this.rank}th`;
+    }
+  }
+  getDiffStr(): string {
+    if (this.diff > 0) {
+      return `+${this.diff}`;
+    }
+    if (this.diff < 0) {
+      return this.diff.toString();
+    }
+    return '±0';
+  }
+}
+export class UnRatedContestResult extends ContestResult {
+  isRated() {
+    return false;
+  }
+}
+export class RatedContestResult extends ContestResult {
+  constructor(date: Date, contestName: string, contestId: string, rank: number, diff: number, public readonly performance: number, public readonly newRating: number) {
+    super(date, contestName, contestId, rank, diff);
+  }
+  isRated() {
+    return true;
+  }
+}
+
 export function parseJudgeStatus(text: string): JudgeStatus {
   const reg = /[　\s]/g;
   // WJ
@@ -227,6 +266,35 @@ export async function getProblems(): Promise<Problem[]> {
       alphabet = 'X';
     }
     res[idx] = new Problem({ contest, id: problemId, title, alphabet });
+  });
+  return res;
+}
+
+export function GetContestResultsFromTable($table: JQuery<HTMLElement>): ContestResult[] {
+  const res: ContestResult[] = [];
+  const $th = $('thead > tr > th', $table);
+  const indexes = getIndexes($th, {
+    date: ['Date', '日付'],
+    contest: ['Contest', 'コンテスト'],
+    rank: ['Rank', '順位'],
+    performance: ['Performance', 'パフォーマンス'],
+    newRating: ['NewRating', '新Rating'],
+    diff: ['Diff', '差分'],
+  });
+  $('tbody > tr', $table).each((idx, tr) => {
+    const $tds = $(tr).children('td');
+    const date = new Date($tds.eq(indexes.date).text());
+    const $contest = $tds.eq(indexes.contest).children('a').eq(0);
+    const contestName = $contest.text();
+    const contestId = (($contest.prop('href') as string).match(/\/contests\/([^\/]+)\/?$/) as string[])[1];
+    const rank = Number($tds.eq(indexes.rank).text());
+    const performanceStr = $tds.eq(indexes.performance).text();
+    const newRatingStr = $tds.eq(indexes.newRating).text();
+    const diff = Number($tds.eq(indexes.diff).text().replace(/[^0-9]/g, ''));
+    const isRated = performanceStr !== '-';
+    res[idx] =
+      isRated ? new RatedContestResult(date, contestName, contestId, rank, diff, Number(performanceStr), Number(newRatingStr))
+        : new UnRatedContestResult(date, contestName, contestId, rank, diff);
   });
   return res;
 }

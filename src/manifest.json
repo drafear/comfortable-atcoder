@@ -1,6 +1,6 @@
 {
 	"name": "Comfortable Atcoder",
-	"version": "1.5.4",
+	"version": "1.6.1",
 	"manifest_version": 2,
 	"description": "Comfort your atcoder life. For more detail, visit https://github.com/drafear/comfortable-atcoder",
 	"author": "drafear",
@@ -70,8 +70,12 @@
 			"run_at": "document_start"
 		},
 		{
-			"matches": ["*://*.contest.atcoder.jp/*"],
-			"js": ["content/link-to-beta.js"],
+			"matches": [
+				"*://*.contest.atcoder.jp/*"
+			],
+			"js": [
+				"content/link-to-beta.js"
+			],
 			"run_at": "document_start"
 		}
 	],
@@ -93,7 +97,7 @@
 	"permissions": [
 		"notifications",
 		"storage",
-		"<all_urls>"
+		"*://atcoder.jp/*"
 	],
 	"icons": {
 		"16": "image/icon.png",

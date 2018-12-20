@@ -23,9 +23,3 @@ export function createNotification({ data, href }: CreateNotificationParam) {
     chrome.notifications.onClosed.addListener(closeHandler);
   }
 }
-
-chrome.runtime.onMessage.addListener(({ type, data }) => {
-  if (type === 'create-notification') {
-    createNotification(data);
-  }
-});

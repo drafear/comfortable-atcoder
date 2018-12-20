@@ -128,7 +128,7 @@ class SubmissionWatcher {
   }
 }
 
-async function watchSubmissionRegister(submission: Betalib.Submission): Promise<void> {
+export async function watchSubmissionRegister(submission: Betalib.Submission): Promise<void> {
   if (watchingSubmissionList.has(submission.id)) {
     return;
   }
@@ -143,9 +143,3 @@ async function watchSubmissionRegister(submission: Betalib.Submission): Promise<
     }, 1000);
   }
 }
-
-chrome.runtime.onMessage.addListener(({ type, data }) => {
-  if (type === 'watch-submission-register') {
-    watchSubmissionRegister(data);
-  }
-});

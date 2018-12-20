@@ -27,6 +27,7 @@
   "xo.enable": true,
   "gitlens.views.repositories.files.layout": "list",
   "cSpell.words": [
+    "arial",
     "atcoder",
     "betalib",
     "brainfuck",
@@ -35,7 +36,13 @@
     "commonlib",
     "drafear",
     "dropdown",
+    "env",
+    "envs",
     "glyphicon",
+    "helvetica",
+    "lato",
+    "multiline",
+    "neue",
     "o",
     "oninstall",
     "unlambda"

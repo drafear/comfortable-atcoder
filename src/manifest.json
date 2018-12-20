@@ -88,8 +88,7 @@
 			"content/all.js",
 			"content/betalib.js",
 			"background/oninstall.js",
-			"background/notification.js",
-			"background/submission-watcher.js"
+			"background/dispatcher.js"
 		],
 		"persistent": false
 	},
@@ -97,6 +96,7 @@
 	"permissions": [
 		"notifications",
 		"storage",
+		"tabs",
 		"*://atcoder.jp/*"
 	],
 	"icons": {

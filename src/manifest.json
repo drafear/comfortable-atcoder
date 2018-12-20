@@ -1,6 +1,6 @@
 {
 	"name": "Comfortable Atcoder",
-	"version": "1.5.3",
+	"version": "1.5.4",
 	"manifest_version": 2,
 	"description": "Comfort your atcoder life. For more detail, visit https://github.com/drafear/comfortable-atcoder",
 	"author": "drafear",
@@ -67,6 +67,11 @@
 			"css": [
 				"css/add-twitter-button.css"
 			],
+			"run_at": "document_start"
+		},
+		{
+			"matches": ["*://*.contest.atcoder.jp/*"],
+			"js": ["content/link-to-beta.js"],
 			"run_at": "document_start"
 		}
 	],

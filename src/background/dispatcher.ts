@@ -1,6 +1,6 @@
 import { createNotification } from './notification'
 import { watchSubmissionRegister } from './submission-watcher';
-import { watchClarificationRegister } from './clar-watcher';
+import { checkClarification } from './clar-watcher';
 
 chrome.runtime.onMessage.addListener(({ type, data }) => {
   switch (type) {
@@ -10,8 +10,8 @@ chrome.runtime.onMessage.addListener(({ type, data }) => {
     case 'watch-submission-register':
       watchSubmissionRegister(data);
       break;
-    case 'watch-clarification-register':
-      watchClarificationRegister(data);
+    case 'check-clarification':
+      checkClarification(data);
       break;
     default:
       console.error(`unknown message: ${type}`);

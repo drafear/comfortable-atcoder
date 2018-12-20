@@ -85,8 +85,6 @@
 	"background": {
 		"scripts": [
 			"lib/jquery.min.js",
-			"content/all.js",
-			"content/betalib.js",
 			"background/oninstall.js",
 			"background/dispatcher.js"
 		],
@@ -96,7 +94,6 @@
 	"permissions": [
 		"notifications",
 		"storage",
-		"tabs",
 		"*://atcoder.jp/*"
 	],
 	"icons": {

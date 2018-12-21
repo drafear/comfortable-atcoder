@@ -29,6 +29,7 @@ export class WatchingListManager<DataType> {
         delete watchingList[key];
       }
     }
+    console.log('WatchingListManager: getCurrentWatchingList:', watchingList);
     return watchingList;
   }
 
@@ -60,8 +61,12 @@ export class WatchingListManager<DataType> {
   }
 
   async remove(watchingId: string) {
+    const watchingList = await this.getCurrentWatchingList();
+    // update
+    delete watchingList[watchingId];
+    // save
     await new Promise(resolve => {
-      chrome.storage.local.remove(watchingId, resolve);
+      chrome.storage.local.set({ [this.storageKey]: watchingList }, resolve);
     });
   }
 }

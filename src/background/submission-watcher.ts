@@ -50,12 +50,14 @@ class SubmissionWatcher {
   }
 
   async start(timeout = 30 * 60 * 1000) {
+    console.log('SubmissionWatcher: start:', this.submission);
     const startTime = Date.now();
     let prevTime = startTime;
     let prevStatus = this.submission.judgeStatus;
     await sleep(100); // Rejudge用
     while (true) {
       const submission = await this.getCurrentSubmission();
+      console.log('SubmissionWatcher: in progress:', this.submission, submission);
       if (!submission.judgeStatus.isWaiting) {
         let message = '';
         // ジャッジ中か
@@ -71,6 +73,7 @@ class SubmissionWatcher {
         if (submission.memoryUsage) {
           message += `\n${submission.memoryUsage}`;
         }
+        console.log('SubmissionWatcher: notification:', this.submission, submission);
         createNotification({
           data: {
             type: 'basic',

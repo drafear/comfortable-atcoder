@@ -93,8 +93,7 @@
 	"options_page": "options-page/options.html",
 	"permissions": [
 		"notifications",
-		"storage",
-		"*://atcoder.jp/*"
+		"storage"
 	],
 	"icons": {
 		"16": "image/icon.png",

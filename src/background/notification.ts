@@ -15,17 +15,6 @@ export function createNotification({ data, href }: CreateNotificationParam) {
       }
       chrome.tabs.create({ url: href });
     };
-    const closeHandler = () => {
-      chrome.notifications.onClicked.removeListener(clickHandler);
-      chrome.notifications.onClosed.removeListener(closeHandler);
-    };
     chrome.notifications.onClicked.addListener(clickHandler);
-    chrome.notifications.onClosed.addListener(closeHandler);
   }
 }
-
-chrome.runtime.onMessage.addListener(({ type, data }) => {
-  if (type === 'create-notification') {
-    createNotification(data);
-  }
-});

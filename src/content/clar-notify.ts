@@ -9,19 +9,16 @@ function getNotifyCount(): number {
 
 Commonlib.runIfEnableAndLoad('notify-clarification', async () => {
   const contest = Betalib.getCurrentContest();
+
+  function updateBackground() {
+    chrome.runtime.sendMessage({ type: 'check-clarification', data: contest });
+  }
+
   let prev = getNotifyCount();
   while (true) {
     const cur = getNotifyCount();
     if (cur > prev) {
-      Commonlib.createNotification({
-        data: {
-          type: 'basic',
-          iconUrl: chrome.extension.getURL('image/question.png'),
-          title: 'Atcoder',
-          message: 'New Clarification',
-        },
-        href: `https://atcoder.jp/contests/${contest.id}/clarifications`,
-      });
+      updateBackground();
       prev = cur;
     }
     await Commonlib.sleep(1000);

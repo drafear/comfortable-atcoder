@@ -4,13 +4,13 @@
   "scripts": {
     "build": "run-s build:*",
     "build:init": "rm -rf dist",
-    "build:cp": "cp -r src dist && rm -rf dist/**/*.less",
+    "build:cp": "cp -r src dist && rm -rf dist/**/*.less dist/**/*.ts dist/**/*.map",
     "build:css": "less-watch-compiler --run-once src dist",
-    "build:ts": "parcel build --target node src/**/*.ts",
+    "build:ts": "parcel build --target node src/**/*.ts --no-source-maps",
     "start": "npm run watch",
     "watch": "run-p watch:*",
     "watch:less": "less-watch-compiler src dist",
-    "watch:build": "parcel --target node src/**/*.ts",
+    "watch:build": "parcel --target node src/**/*.ts --no-source-maps",
     "watch:test": "jest --watch",
     "package": "npm run build && zip -rq Release.zip dist"
   },

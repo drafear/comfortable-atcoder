@@ -1,6 +1,6 @@
 {
 	"name": "Comfortable Atcoder",
-	"version": "1.6.1",
+	"version": "1.6.2",
 	"manifest_version": 2,
 	"description": "Comfort your atcoder life. For more detail, visit https://github.com/drafear/comfortable-atcoder",
 	"author": "drafear",
@@ -85,19 +85,15 @@
 	"background": {
 		"scripts": [
 			"lib/jquery.min.js",
-			"content/all.js",
-			"content/betalib.js",
 			"background/oninstall.js",
-			"background/notification.js",
-			"background/submission-watcher.js"
+			"background/dispatcher.js"
 		],
 		"persistent": false
 	},
 	"options_page": "options-page/options.html",
 	"permissions": [
 		"notifications",
-		"storage",
-		"*://atcoder.jp/*"
+		"storage"
 	],
 	"icons": {
 		"16": "image/icon.png",

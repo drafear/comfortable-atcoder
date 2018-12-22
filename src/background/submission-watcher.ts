@@ -1,6 +1,7 @@
-import * as Commonlib from '../content/all';
+import { sleep } from '../content/all';
 import * as Betalib from '../content/betalib';
 import { createNotification } from './notification';
+import { WatchingSetManager } from './watching-list-manager';
 
 interface JudgeResultImageStyle {
   foreColor?: string;
@@ -39,7 +40,7 @@ function makeJudgeStatusImageUrl(judgeResult: string): string {
   return canvas.toDataURL('image/png');
 }
 
-const watchingSubmissionList = new Set();
+const watchingSubmissionManager = new WatchingSetManager('submission');
 
 class SubmissionWatcher {
   public readonly submission: Betalib.Submission;
@@ -49,12 +50,14 @@ class SubmissionWatcher {
   }
 
   async start(timeout = 30 * 60 * 1000) {
+    console.log('SubmissionWatcher: start:', this.submission);
     const startTime = Date.now();
     let prevTime = startTime;
     let prevStatus = this.submission.judgeStatus;
-    await Commonlib.sleep(100); // Rejudge用
+    await sleep(100); // Rejudge用
     while (true) {
       const submission = await this.getCurrentSubmission();
+      console.log('SubmissionWatcher: in progress:', this.submission, submission);
       if (!submission.judgeStatus.isWaiting) {
         let message = '';
         // ジャッジ中か
@@ -70,6 +73,7 @@ class SubmissionWatcher {
         if (submission.memoryUsage) {
           message += `\n${submission.memoryUsage}`;
         }
+        console.log('SubmissionWatcher: notification:', this.submission, submission);
         createNotification({
           data: {
             type: 'basic',
@@ -94,7 +98,7 @@ class SubmissionWatcher {
       }
       prevTime = curTime;
       prevStatus = submission.judgeStatus;
-      await Commonlib.sleep(sleepMilliseconds);
+      await sleep(sleepMilliseconds);
     }
   }
 
@@ -128,24 +132,17 @@ class SubmissionWatcher {
   }
 }
 
-async function watchSubmissionRegister(submission: Betalib.Submission): Promise<void> {
-  if (watchingSubmissionList.has(submission.id)) {
+export async function watchSubmissionRegister(submission: Betalib.Submission): Promise<void> {
+  if (await watchingSubmissionManager.has(submission.id)) {
     return;
   }
-  watchingSubmissionList.add(submission.id);
+  await watchingSubmissionManager.add(submission.id);
   try {
     await new SubmissionWatcher(submission).start();
   } catch (error) {
     throw error;
   } finally {
-    setTimeout(() => {
-      watchingSubmissionList.delete(submission.id);
-    }, 1000);
+    await sleep(1000);
+    await watchingSubmissionManager.delete(submission.id);
   }
 }
-
-chrome.runtime.onMessage.addListener(({ type, data }) => {
-  if (type === 'watch-submission-register') {
-    watchSubmissionRegister(data);
-  }
-});

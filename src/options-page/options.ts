@@ -1,5 +1,5 @@
 class Language {
-  constructor(public readonly id: string, public readonly name: string) { }
+  constructor(public readonly id: string, public readonly name: string) {}
 }
 
 class Switch {
@@ -51,7 +51,7 @@ class Switch {
   }
 }
 class Choice {
-  constructor(public readonly name: string, public readonly component: Switch) { }
+  constructor(public readonly name: string, public readonly component: Switch) {}
 
   async toElem() {
     const li = document.createElement('li');
@@ -66,7 +66,7 @@ class Choice {
 }
 
 class Group {
-  constructor(public readonly name: string, public readonly choices: Choice[]) { }
+  constructor(public readonly name: string, public readonly choices: Choice[]) {}
 
   async toElem() {
     const div = document.createElement('div');

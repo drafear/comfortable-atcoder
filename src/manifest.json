@@ -85,19 +85,15 @@
 	"background": {
 		"scripts": [
 			"lib/jquery.min.js",
-			"content/all.js",
-			"content/betalib.js",
 			"background/oninstall.js",
-			"background/notification.js",
-			"background/submission-watcher.js"
+			"background/dispatcher.js"
 		],
 		"persistent": false
 	},
 	"options_page": "options-page/options.html",
 	"permissions": [
 		"notifications",
-		"storage",
-		"*://atcoder.jp/*"
+		"storage"
 	],
 	"icons": {
 		"16": "image/icon.png",

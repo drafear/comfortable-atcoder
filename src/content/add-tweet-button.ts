@@ -37,11 +37,12 @@ Commonlib.runIfEnableAndLoad('add-tweet-button', async () => {
     const r = contestResult;
     if (r instanceof Betalib.RatedContestResult) {
       const highestStr = isHighest ? ', Highest!!' : '';
-      return `I took ${r.getRankStr()} place in ${r.contestName}\n\nRating: ${r.newRating - r.diff} -> ${r.newRating} (${r.getDiffStr()}${highestStr})\nPerformance: ${r.performance}\n#${r.contestId}`;
+      return `I took ${r.getRankStr()} place in ${r.contestName}\n\nRating: ${r.newRating - r.diff} -> ${
+        r.newRating
+      } (${r.getDiffStr()}${highestStr})\nPerformance: ${r.performance}\n#${r.contestId}`;
     }
-    else {
-      return `I took ${r.getRankStr()} place in ${r.contestName}\n#${r.contestId}`;
-    }
+
+    return `I took ${r.getRankStr()} place in ${r.contestName}\n#${r.contestId}`;
   }
 
   function isHighest(targetContestResult: Betalib.ContestResult, contestResults: Betalib.ContestResult[]) {
@@ -63,18 +64,23 @@ Commonlib.runIfEnableAndLoad('add-tweet-button', async () => {
   }
 
   const $table = await getTable();
-  const contestResults = Betalib.GetContestResultsFromTable($table);
+  const contestResults = Betalib.getContestResultsFromTable($table);
   const latestContestResult = getLatestContestResult(contestResults);
   // 一度も参加したことがない
   if (latestContestResult === null) {
     return;
   }
   const tweetContent = makeTweetText(latestContestResult, isHighest(latestContestResult, contestResults));
-  const text = navigator.language === 'ja' ? '最新のコンテスト結果をツイート' : 'Tweet the result of the latest contest';
-  const $tweetButton = $('<a>').addClass('tweet').text(text)
+  const text =
+    navigator.language === 'ja' ? '最新のコンテスト結果をツイート' : 'Tweet the result of the latest contest';
+  const $tweetButton = $('<a>')
+    .addClass('tweet')
+    .text(text)
     .prop('href', `https://twitter.com/share?url=''&text=${encodeURIComponent(tweetContent)}`)
     .prop('target', '_blank');
   if (isDetailPage) {
-    $('#history_wrapper > div.row:first-child > .col-sm-6:first-child').eq(0).prepend($tweetButton);
+    $('#history_wrapper > div.row:first-child > .col-sm-6:first-child')
+      .eq(0)
+      .prepend($tweetButton);
   }
 });

@@ -33,15 +33,20 @@ export class WatchingListManager<DataType> {
     return watchingList;
   }
 
+  getKey(watchingId: string) {
+    return `#id:${watchingId}`;
+  }
+
   async set(watchingId: string, data: DataType) {
     const now = Date.now();
     const watchingList = await this.getCurrentWatchingList(now);
     // update
-    watchingList[watchingId] = {
+    watchingList[this.getKey(watchingId)] = {
       updatedAt: now,
       data: data,
     };
     // save
+    console.log("save", watchingList);
     await new Promise(resolve => {
       chrome.storage.local.set({ [this.storageKey]: watchingList }, resolve);
     });
@@ -49,13 +54,13 @@ export class WatchingListManager<DataType> {
 
   async isWatching(watchingId: string): Promise<boolean> {
     const watchingList = await this.getCurrentWatchingList();
-    return watchingId in watchingList;
+    return this.getKey(watchingId) in watchingList;
   }
 
   async get(watchingId: string): Promise<DataType> {
     const watchingList = await this.getCurrentWatchingList();
-    if (watchingId in watchingList) {
-      return watchingList[watchingId].data;
+    if (this.getKey(watchingId) in watchingList) {
+      return watchingList[this.getKey(watchingId)].data;
     }
     return this.defaultData;
   }
@@ -63,7 +68,7 @@ export class WatchingListManager<DataType> {
   async remove(watchingId: string) {
     const watchingList = await this.getCurrentWatchingList();
     // update
-    delete watchingList[watchingId];
+    delete watchingList[this.getKey(watchingId)];
     // save
     await new Promise(resolve => {
       chrome.storage.local.set({ [this.storageKey]: watchingList }, resolve);

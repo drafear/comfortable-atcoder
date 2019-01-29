@@ -1,3 +1,4 @@
+import { Lock } from '../lib/lock';
 import { sleep } from '../content/all';
 import * as Betalib from '../content/betalib';
 import { createNotification } from './notification';
@@ -132,17 +133,24 @@ class SubmissionWatcher {
   }
 }
 
+const lock = new Lock();
+
 export async function watchSubmissionRegister(submission: Betalib.Submission): Promise<void> {
-  if (await watchingSubmissionManager.has(submission.id)) {
-    return;
-  }
-  await watchingSubmissionManager.add(submission.id);
+  let has = false;
+  await lock.acquire(async () => {
+    if (await watchingSubmissionManager.has(submission.id)) {
+      has = true;
+      return;
+    }
+    await watchingSubmissionManager.add(submission.id);
+  });
+  if (has) return;
   try {
     await new SubmissionWatcher(submission).start();
   } catch (error) {
     throw error;
   } finally {
-    await sleep(1000);
+    await sleep(1000 * 10);
     await watchingSubmissionManager.delete(submission.id);
   }
 }

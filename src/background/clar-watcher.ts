@@ -1,6 +1,7 @@
 import { createNotification } from './notification';
 import * as Betalib from '../content/betalib';
 import { WatchingListManager } from './watching-list-manager';
+import { Lock } from '../lib/lock';
 
 const watchingClarManager = new WatchingListManager<number>('clarification', 24 * 60 * 60 * 1000, 0);
 
@@ -10,7 +11,7 @@ async function getClarCount(contestId: string): Promise<number> {
   return curClarCount;
 }
 
-export async function checkClarification(contest: Betalib.Contest) {
+export async function checkClarification(contest: Betalib.Contest, notifyLock: Lock) {
   const clarCount = await getClarCount(contest.id);
   const prevClarCount = await watchingClarManager.get(contest.id);
   if (clarCount > prevClarCount) {
@@ -23,6 +24,6 @@ export async function checkClarification(contest: Betalib.Contest) {
         message: 'New Clarification',
       },
       href: `https://atcoder.jp/contests/${contest.id}/clarifications`,
-    });
+    }, notifyLock);
   }
 }

@@ -44,10 +44,7 @@ function makeJudgeStatusImageUrl(judgeResult: string): string {
 const watchingSubmissionManager = new WatchingSetManager('submission');
 
 class SubmissionWatcher {
-  public readonly submission: Betalib.Submission;
-
-  constructor(submission: Betalib.Submission) {
-    this.submission = submission;
+  constructor(readonly submission: Betalib.Submission, private notifyLock: Lock) {
   }
 
   async start(timeout = 30 * 60 * 1000) {
@@ -83,7 +80,7 @@ class SubmissionWatcher {
             message,
           },
           href: submission.detailAbsoluteUrl,
-        });
+        }, this.notifyLock);
         break;
       }
       const curTime = Date.now();
@@ -135,7 +132,7 @@ class SubmissionWatcher {
 
 const lock = new Lock();
 
-export async function watchSubmissionRegister(submission: Betalib.Submission): Promise<void> {
+export async function watchSubmissionRegister(submission: Betalib.Submission, notifyLock: Lock): Promise<void> {
   let has = false;
   await lock.acquire(async () => {
     if (await watchingSubmissionManager.has(submission.id)) {
@@ -146,7 +143,7 @@ export async function watchSubmissionRegister(submission: Betalib.Submission): P
   });
   if (has) return;
   try {
-    await new SubmissionWatcher(submission).start();
+    await new SubmissionWatcher(submission, notifyLock).start();
   } catch (error) {
     throw error;
   } finally {

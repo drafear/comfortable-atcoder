@@ -9,23 +9,23 @@ export interface CreateNotificationParam {
 export async function createNotification({ data, href }: CreateNotificationParam, lock: Lock) {
   let notificationId: string;
   await lock.acquire(async () => {
-    await new Promise(resolve => {
-      data.requireInteraction = true;
-      const clickHandler = (id: string) => {
-        if (id !== notificationId) {
-          return;
-        }
+    data.requireInteraction = true;
+    const clickHandler = (id: string) => {
+      if (id === notificationId) {
         chrome.tabs.create({ url: href });
-      };
-      chrome.notifications.onClicked.addListener(clickHandler);
+      }
+    };
+    chrome.notifications.onClicked.addListener(clickHandler);
+    // create notification and get notification id
+    await new Promise(resolve => {
       chrome.notifications.create(data, async id => {
-        console.log('create', id);
         notificationId = id;
-        await sleep(8000);
-        chrome.notifications.clear(id);
-        await sleep(1000);
         resolve();
       });
     });
+    await sleep(8000);
+    chrome.notifications.clear(notificationId);
+    chrome.notifications.onClicked.removeListener(clickHandler);
+    await sleep(1000);
   });
 }

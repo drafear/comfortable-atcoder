@@ -292,14 +292,15 @@ export async function getProblems(): Promise<Problem[]> {
     const html = await response.text();
     $html = $(html);
   }
-  const $th = $('thead > tr > th', $html);
+  const $table = $('table', $html).eq(0);
+  const $th = $('thead > tr > th', $table);
   const { prob: probColIdx } = getIndexes($th, { prob: ['Task Name', '問題'] });
   if (probColIdx === undefined) {
     throw new Error("Betalib: getProblems: Can't get probColIdx");
   }
   const res: Problem[] = [];
   const reg = new RegExp(`${contest.url.replace(/\//g, '\\/')}\\/tasks\\/([^/]+)`);
-  $(`tbody > tr > td:nth-child(${probColIdx + 1})`, $html).each((idx, elem) => {
+  $(`tbody > tr > td:nth-child(${probColIdx + 1})`, $table).each((idx, elem) => {
     const $a = $(elem).children('a');
     const problemId = (($a.attr('href') as string).match(reg) as string[])[1];
     const title = $a.text();

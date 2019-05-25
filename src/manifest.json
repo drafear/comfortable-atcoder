@@ -93,7 +93,8 @@
 	"options_page": "options-page/options.html",
 	"permissions": [
 		"notifications",
-		"storage"
+		"storage",
+		"tabs"
 	],
 	"icons": {
 		"16": "image/icon.png",

@@ -4,6 +4,10 @@ import * as Betalib from '../content/betalib';
 import { createNotification } from './notification';
 import { WatchingSetManager } from './watching-list-manager';
 
+interface MessageResultError {
+  error: string;
+}
+
 interface JudgeResultImageStyle {
   foreColor?: string;
   backColor?: string;
@@ -108,32 +112,42 @@ class SubmissionWatcher {
   }
 
   async getCurrentSubmission() {
+    // submission画面を開いているものがあればそこから取得
+    const tabs: chrome.tabs.Tab[] = await new Promise(resolve => {
+      chrome.tabs.query({ url: `*://atcoder.jp/contests/${this.submission.contest.id}/submissions/me` }, resolve);
+    });
+    for (const tab of tabs) {
+      if (tab.id === undefined) {
+        continue;
+      }
+      const result: Betalib.Submission | MessageResultError | null = await Promise.race([
+        new Promise(resolve => {
+          const message = { type: "get-submission", id: this.submission.id };
+          console.log(`send message to tab ${tab.id!}:`, this.submission);
+          chrome.tabs.sendMessage(tab.id!, message, resolve);
+        }),
+        (async () => {
+          await sleep(1 * 1000);
+          return null;
+        })(),
+      ]);
+      if (result) {
+        if ('error' in result) {
+          console.error(result.error);
+        }
+        else {
+          console.log('submission was found in tabs:', result);
+          return result;
+        }
+      }
+    }
+    // 取得できなかった場合、detail画面をfetchする
     const response = await fetch(this.submission.detailAbsoluteUrl, { cache: 'no-cache' });
     const html = await response.text();
     const root = new DOMParser().parseFromString(html, 'text/html');
-    const $table = $(root.querySelector('table') as HTMLTableElement);
-    const $ths = $table.find('th');
-    const indexes = Betalib.getIndexes($ths, {
-      score: ['点', 'Score'],
-      status: ['結果', 'Status'],
-      time: ['実行時間', 'Exec Time'],
-      memory: ['メモリ', 'Memory'],
-    });
-    if (!('status' in indexes)) {
-      throw new Error("getCurrentSubmission: Can't get status");
-    }
-    const $tds = $table.find('td');
-    const { id: submissionId, contest, probTitle } = this.submission;
-    const score = $tds.eq(indexes.score).text();
-    const judgeStatus = Betalib.parseJudgeStatus(
-      $tds
-        .eq(indexes.status)
-        .children('span')
-        .text(),
-    );
-    const execTime = 'time' in indexes ? $tds.eq(indexes.time).text() : undefined;
-    const memoryUsage = 'memory' in indexes ? $tds.eq(indexes.memory).text() : undefined;
-    return new Betalib.Submission({ contest, id: submissionId, probTitle, score, judgeStatus, execTime, memoryUsage });
+    const result = Betalib.parseSubmissionFromDetailPage(root, this.submission);
+    console.log('submission was fetched:', result);
+    return result;
   }
 }
 

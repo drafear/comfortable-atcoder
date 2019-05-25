@@ -44,7 +44,10 @@ function makeJudgeStatusImageUrl(judgeResult: string): string {
 const watchingSubmissionManager = new WatchingSetManager('submission');
 
 class SubmissionWatcher {
+  private maxSleepMilliseconds: number;
+
   constructor(readonly submission: Betalib.Submission, private notifyLock: Lock) {
+    this.maxSleepMilliseconds = 5 * 1000;
   }
 
   async start(timeout = 30 * 60 * 1000) {
@@ -88,11 +91,15 @@ class SubmissionWatcher {
         break;
       }
       const dt = curTime - prevTime;
-      let sleepMilliseconds = 5 * 1000;
+      let sleepMilliseconds = this.maxSleepMilliseconds;
       if (prevStatus.now !== undefined) {
         const diff = (submission.judgeStatus.now as number) - prevStatus.now;
-        const estimated = dt === 0 ? 0 : ((submission.judgeStatus.rest as number) * dt) / (diff + 1);
+        const estimated = dt === 0 ? 0 : Math.floor(((submission.judgeStatus.rest as number) * dt) / (diff + 1));
         sleepMilliseconds = Math.min(sleepMilliseconds, Math.max(estimated, 1 * 1000));
+        // ジャッジが進まないなら頻度を下げる
+        if (diff === 0) {
+          this.maxSleepMilliseconds = Math.floor(this.maxSleepMilliseconds * 1.2);
+        }
       }
       prevTime = curTime;
       prevStatus = submission.judgeStatus;

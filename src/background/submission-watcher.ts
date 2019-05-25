@@ -56,8 +56,10 @@ class SubmissionWatcher {
 
   async start(timeout = 30 * 60 * 1000) {
     console.log('SubmissionWatcher: start:', this.submission);
+    const slowModeTimeout = 1 * 60 * 1000; // ジャッジが進まなくなってからこの時間が経過するとslow modeになる
     const startTime = Date.now();
     let prevTime = startTime;
+    let prevUpdatedTime = startTime;
     let prevStatus = this.submission.judgeStatus;
     await sleep(100); // Rejudge用
     while (true) {
@@ -98,12 +100,24 @@ class SubmissionWatcher {
       let sleepMilliseconds = this.maxSleepMilliseconds;
       if (prevStatus.now !== undefined) {
         const diff = (submission.judgeStatus.now as number) - prevStatus.now;
-        const estimated = dt === 0 ? 0 : Math.floor(((submission.judgeStatus.rest as number) * dt) / (diff + 1));
-        sleepMilliseconds = Math.min(sleepMilliseconds, Math.max(estimated, 1 * 1000));
+        if (diff !== 0 || curTime - prevUpdatedTime <= slowModeTimeout) {
+          const estimated = Math.floor(((submission.judgeStatus.rest as number + 1) * dt) / (diff + 1));
+          sleepMilliseconds = Math.min(sleepMilliseconds, Math.max(estimated, 1 * 1000));
+        }
+        else {
+          sleepMilliseconds = this.maxSleepMilliseconds;
+        }
         // ジャッジが進まないなら頻度を下げる
         if (diff === 0) {
           this.maxSleepMilliseconds = Math.floor(this.maxSleepMilliseconds * 1.2);
         }
+        else {
+          prevUpdatedTime = curTime;
+        }
+      }
+      else {
+        // ジャッジが進まないなら頻度を下げる
+        this.maxSleepMilliseconds = Math.floor(this.maxSleepMilliseconds * 1.2);
       }
       prevTime = curTime;
       prevStatus = submission.judgeStatus;

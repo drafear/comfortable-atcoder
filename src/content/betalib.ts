@@ -129,7 +129,7 @@ export abstract class ContestResult {
     public readonly contestId: string,
     public readonly rank: number,
     public readonly diff: number,
-  ) {}
+  ) { }
 
   abstract isRated(): boolean;
 
@@ -194,6 +194,32 @@ export function parseJudgeStatus(text: string): JudgeStatus {
   return new JudgeStatus({ text: text.replace(reg, '') });
 }
 
+export function parseSubmissionFromDetailPage(htmlRoot: Document, submission: Submission) {
+  const $table = $(htmlRoot.querySelector('table') as HTMLTableElement);
+  const $ths = $table.find('th');
+  const indexes = getIndexes($ths, {
+    score: ['点', 'Score'],
+    status: ['結果', 'Status'],
+    time: ['実行時間', 'Exec Time'],
+    memory: ['メモリ', 'Memory'],
+  });
+  if (!('status' in indexes)) {
+    throw new Error("getCurrentSubmission: Can't get status");
+  }
+  const $tds = $table.find('td');
+  const { id: submissionId, contest, probTitle } = submission;
+  const score = $tds.eq(indexes.score).text();
+  const judgeStatus = parseJudgeStatus(
+    $tds
+      .eq(indexes.status)
+      .children('span')
+      .text(),
+  );
+  const execTime = 'time' in indexes ? $tds.eq(indexes.time).text() : undefined;
+  const memoryUsage = 'memory' in indexes ? $tds.eq(indexes.memory).text() : undefined;
+  return new Submission({ contest, id: submissionId, probTitle, score, judgeStatus, execTime, memoryUsage });
+}
+
 export function getCurrentContest(): Contest {
   const contestId = (location.pathname.match(/^\/contests\/([^/]+)/) as string[])[1];
   return new Contest(contestId);
@@ -246,8 +272,10 @@ export async function getMySubmissions(): Promise<Submission[]> {
         .children('span')
         .text(),
     );
-    const execTime = 'time' in indexes ? $tds.eq(indexes.time).text() : undefined;
-    const memoryUsage = 'memory' in indexes ? $tds.eq(indexes.memory).text() : undefined;
+    let execTime: string | undefined = $tds.eq(indexes.time).text();
+    if (!/s$/.test(execTime)) execTime = undefined;
+    let memoryUsage: string | undefined = $tds.eq(indexes.memory).text();
+    if (!/B$/.test(memoryUsage)) memoryUsage = undefined;
     res[idx] = new Submission({ contest, id: submissionId, probTitle, score, judgeStatus, execTime, memoryUsage });
   });
   return res;
@@ -264,14 +292,15 @@ export async function getProblems(): Promise<Problem[]> {
     const html = await response.text();
     $html = $(html);
   }
-  const $th = $('thead > tr > th', $html);
+  const $table = $('table', $html).eq(0);
+  const $th = $('thead > tr > th', $table);
   const { prob: probColIdx } = getIndexes($th, { prob: ['Task Name', '問題'] });
   if (probColIdx === undefined) {
     throw new Error("Betalib: getProblems: Can't get probColIdx");
   }
   const res: Problem[] = [];
   const reg = new RegExp(`${contest.url.replace(/\//g, '\\/')}\\/tasks\\/([^/]+)`);
-  $(`tbody > tr > td:nth-child(${probColIdx + 1})`, $html).each((idx, elem) => {
+  $(`tbody > tr > td:nth-child(${probColIdx + 1})`, $table).each((idx, elem) => {
     const $a = $(elem).children('a');
     const problemId = (($a.attr('href') as string).match(reg) as string[])[1];
     const title = $a.text();

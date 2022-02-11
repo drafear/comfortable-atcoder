@@ -20,7 +20,7 @@
     "@types/chrome": "0.0.75",
     "@types/jest": "23.3.10",
     "@types/jquery": "3.3.23",
-    "ajv": "6.6.1",
+    "ajv": "6.12.3",
     "eslint": "5.9.0",
     "eslint-config-xo-typescript": "0.3.0",
     "eslint-plugin-typescript": "0.14.0",
